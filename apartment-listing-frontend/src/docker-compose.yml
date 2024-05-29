@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  server:
+    build: ./server
+    ports:
+      - "192.168.68.54:5011:5011"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/apartment-listing
+      - HOST=192.168.68.54
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "192.168.68.54:8080:8080"
+    networks:
+      - app-network
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - apartmentListingData:/data/db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+
+volumes:
+  apartmentListingData:
